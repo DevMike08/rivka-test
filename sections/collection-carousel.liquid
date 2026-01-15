@@ -5,7 +5,11 @@
         {% for block in section.blocks %}
           {% assign collection = block.settings.collection %}
           {% if collection %}
-            {% assign image = block.settings.image | default: collection.featured_image %}
+            {% assign image = block.settings.image %}
+            {% if image == blank and collection.featured_image %}
+              {% assign image = collection.featured_image %}
+            {% endif %}
+
             {% assign url = block.settings.url | default: collection.url %}
 
             <a
@@ -52,6 +56,8 @@
           {% endif %}
         {% endfor %}
       </div>
+      <div class="swiper-button-prev" data-carousel-prev></div>
+      <div class="swiper-button-next" data-carousel-next></div>
     </div>
   </div>
 {% endif %}
@@ -86,12 +92,14 @@
         {
           "type": "text",
           "id": "title",
-          "label": "Título"
+          "label": "Título",
+          "default": "Collection title"
         },
         {
           "type": "textarea",
           "id": "description",
-          "label": "Descripción"
+          "label": "Descripción",
+          "default": "Short description for this collection"
         },
         {
           "type": "url",

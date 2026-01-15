@@ -55,3 +55,12 @@
   margin-top: 0.25rem;
   color: rgba(0, 0, 0, 0.7);
 }
+
+.collection-carousel .swiper-button-prev,
+.collection-carousel .swiper-button-next {
+  color: #000;
+}
+
+.collection-carousel .swiper-button-disabled {
+  opacity: 0.3;
+}

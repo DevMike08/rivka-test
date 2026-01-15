@@ -9,13 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
     slidesPerView: 1,
     spaceBetween: 16,
     watchOverflow: true,
+    navigation: {
+        nextEl: '[data-carousel-next]',
+        prevEl: '[data-carousel-prev]'
+    },
     breakpoints: {
-      768: {
+        768: {
         slidesPerView: 4
-      },
-      1024: {
+        },
+        1024: {
         slidesPerView: 6
-      }
+        }
     }
-  });
+    });
+
 });

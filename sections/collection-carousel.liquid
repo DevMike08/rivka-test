@@ -1,0 +1,28 @@
+{% if section.blocks.size > 0 %}
+  <div class="collection-carousel">
+    {% for block in section.blocks %}
+      {{ block.shopify_attributes }}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collection Carousel",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "url", "id": "url", "label": "URL" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "collection", "id": "collection", "label": "Collection" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Collection Carousel" }],
+  "templates": ["collection"]
+}
+{% endschema %}

@@ -1,160 +1,87 @@
-<h1 align="center" style="position: relative;">
-  <br>
-    <img src="./assets/shoppy-x-ray.svg" alt="logo" width="200">
-  <br>
-  Shopify Skeleton Theme
-</h1>
+# Collection Carousel — Shopify Theme OS 2.0
 
-A minimal, carefully structured Shopify theme designed to help you quickly get started. Designed with modularity, maintainability, and Shopify's best practices in mind.
+Custom Shopify section developed as part of a technical test.
 
-<p align="center">
-  <a href="./LICENSE.md"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
-  <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Shopify/skeleton-theme/actions/workflows/ci.yml/badge.svg"></a>
-</p>
+This section renders a responsive collection carousel using Shopify Theme OS 2.0 standards, Liquid best practices, and Swiper.js for interaction.
 
-## Getting started
+---
 
-### Prerequisites
+## ✨ Features
 
-Before starting, ensure you have the latest Shopify CLI installed:
+- Custom section compatible with **Shopify Theme OS 2.0**
+- Supports **0 / 1 / N slides** without breaking layout or functionality
+- Uses **Swiper.js** for carousel behavior
+- Fully responsive with `srcset` and `sizes`
+- Slide-level image override with fallback to collection featured image
+- Shopify-native placeholder when no image is available
+- Configurable through the Theme Editor (blocks & settings)
+- Clean, maintainable, and well-structured code
 
-- [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) – helps you download, upload, preview themes, and streamline your workflows
+---
 
-If you use VS Code:
+## 🧱 Section Structure
 
-- [Shopify Liquid VS Code Extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode) – provides syntax highlighting, linting, inline documentation, and auto-completion specifically designed for Liquid templates
+Each slide is configured as a **block**, allowing merchants to:
 
-### Clone
+- Select a collection
+- Optionally override the image
+- Customize title and description
+- Define a custom URL (fallbacks to collection URL)
 
-Clone this repository using Git or Shopify CLI:
+---
 
-```bash
-git clone git@github.com:Shopify/skeleton-theme.git
-# or
-shopify theme init
-```
+## 🖼️ Image Handling Logic
 
-### Preview
+Image rendering follows this priority:
 
-Preview this theme using Shopify CLI:
+1. Slide custom image
+2. Selected collection featured image
+3. Shopify default image placeholder (`placeholder_svg_tag`)
 
-```bash
-shopify theme dev
-```
+This ensures the section never breaks visually, even when images are missing.
 
-## Theme architecture
+---
 
-```bash
-.
-├── assets          # Stores static assets (CSS, JS, images, fonts, etc.)
-├── blocks          # Reusable, nestable, customizable UI components
-├── config          # Global theme settings and customization options
-├── layout          # Top-level wrappers for pages (layout templates)
-├── locales         # Translation files for theme internationalization
-├── sections        # Modular full-width page components
-├── snippets        # Reusable Liquid code or HTML fragments
-└── templates       # Templates combining sections to define page structures
-```
+## 📱 Responsive Behavior
 
-To learn more, refer to the [theme architecture documentation](https://shopify.dev/docs/storefronts/themes/architecture).
+- Images use `srcset` and `sizes` for optimized loading
+- Layout adapts across mobile, tablet, and desktop
+- Placeholder SVG is wrapped and styled to behave responsively like real images
+- Carousel initializes **only when more than one slide exists**
 
-### Templates
+---
 
-[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme.
+## 🧪 Edge Cases Covered
 
-The Skeleton Theme scaffolds [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) to make it easy for merchants to customize their store.
+- No blocks added → section does not render
+- Single slide → static layout, no carousel initialization
+- Multiple slides → full Swiper carousel behavior
+- Missing images → graceful fallback with consistent layout
 
-None of the template types are required, and not all of them are included in the Skeleton Theme. Refer to the [template types reference](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) for a full list.
+---
 
-### Sections
+## 🛠️ Tech Stack
 
-[Sections](https://shopify.dev/docs/storefronts/themes/architecture/sections) are Liquid files that allow you to create reusable modules of content that can be customized by merchants. They can also include blocks which allow merchants to add, remove, and reorder content within a section.
+- Shopify Liquid
+- Shopify Theme OS 2.0
+- Swiper.js
+- Vanilla JavaScript
+- CSS (modern layout techniques)
 
-Sections are made customizable by including a `{% schema %}` in the body. For more information, refer to the [section schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema).
+---
 
-### Blocks
+## 🚀 How to Test
 
-[Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks) let developers create flexible layouts by breaking down sections into smaller, reusable pieces of Liquid. Each block has its own set of settings, and can be added, removed, and reordered within a section.
+1. Add the section in the Theme Editor
+2. Create 0, 1, or multiple blocks
+3. Test slides with:
+   - custom image
+   - no image
+   - collections without featured images
+4. Resize the viewport to validate responsive behavior
 
-Blocks are made customizable by including a `{% schema %}` in the body. For more information, refer to the [block schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/schema).
+---
 
-## Schemas
+## 📌 Notes
 
-When developing components defined by schema settings, we recommend these guidelines to simplify your code:
-
-- **Single property settings**: For settings that correspond to a single CSS property, use CSS variables:
-
-  ```liquid
-  <div class="collection" style="--gap: {{ block.settings.gap }}px">
-    ...
-  </div>
-
-  {% stylesheet %}
-    .collection {
-      gap: var(--gap);
-    }
-  {% endstylesheet %}
-
-  {% schema %}
-  {
-    "settings": [{
-      "type": "range",
-      "label": "gap",
-      "id": "gap",
-      "min": 0,
-      "max": 100,
-      "unit": "px",
-      "default": 0,
-    }]
-  }
-  {% endschema %}
-  ```
-
-- **Multiple property settings**: For settings that control multiple CSS properties, use CSS classes:
-
-  ```liquid
-  <div class="collection {{ block.settings.layout }}">
-    ...
-  </div>
-
-  {% stylesheet %}
-    .collection--full-width {
-      /* multiple styles */
-    }
-    .collection--narrow {
-      /* multiple styles */
-    }
-  {% endstylesheet %}
-
-  {% schema %}
-  {
-    "settings": [{
-      "type": "select",
-      "id": "layout",
-      "label": "layout",
-      "values": [
-        { "value": "collection--full-width", "label": "t:options.full" },
-        { "value": "collection--narrow", "label": "t:options.narrow" }
-      ]
-    }]
-  }
-  {% endschema %}
-  ```
-
-## CSS & JavaScript
-
-For CSS and JavaScript, we recommend using the [`{% stylesheet %}`](https://shopify.dev/docs/api/liquid/tags#stylesheet) and [`{% javascript %}`](https://shopify.dev/docs/api/liquid/tags/javascript) tags. They can be included multiple times, but the code will only appear once.
-
-### `critical.css`
-
-The Skeleton Theme explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
-
-## Contributing
-
-We're excited for your contributions to the Skeleton Theme! This repository aims to remain as lean, lightweight, and fundamental as possible, and we kindly ask your contributions to align with this intention.
-
-Visit our [CONTRIBUTING.md](./CONTRIBUTING.md) for a detailed overview of our process, guidelines, and recommendations.
-
-## License
-
-Skeleton Theme is open-sourced under the [MIT](./LICENSE.md) License.
+This implementation follows Shopify best practices and focuses on robustness, maintainability, and merchant experience.

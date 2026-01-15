@@ -5,10 +5,19 @@
         {% for block in section.blocks %}
           {% assign collection = block.settings.collection %}
           {% if collection %}
-            {% assign image = block.settings.image %}
-            {% if image == blank and collection.featured_image %}
+
+            {% assign image = nil %}
+            {% assign show_placeholder = false %}
+
+            {% if block.settings.image != blank %}
+              {% assign image = block.settings.image %}
+            {% elsif collection.featured_image != blank %}
               {% assign image = collection.featured_image %}
+            {% else %}
+              {% assign show_placeholder = true %}
             {% endif %}
+
+
 
             {% assign url = block.settings.url | default: collection.url %}
 
@@ -17,29 +26,31 @@
               class="swiper-slide carousel-slide"
               {{ block.shopify_attributes }}
             >
-              {% if image %}
-                <div class="carousel-image">
+              <div class="carousel-image">
+                {% if image %}
                   <img
-                  src="{{ image | image_url: width: 600 }}"
-                  srcset="
+                    src="{{ image | image_url: width: 600 }}"
+                    srcset="
                       {{ image | image_url: width: 320 }} 320w,
                       {{ image | image_url: width: 480 }} 480w,
                       {{ image | image_url: width: 640 }} 640w,
                       {{ image | image_url: width: 960 }} 960w,
                       {{ image | image_url: width: 1200 }} 1200w
-                  "
-                  sizes="
+                    "
+                    sizes="
                       (max-width: 767px) 100vw,
                       (max-width: 1023px) 25vw,
                       16vw
-                  "
-                  alt="{{ image.alt | escape }}"
-                  loading="lazy"
-                  decoding="async"
+                    "
+                    alt="{{ image.alt | escape }}"
+                    loading="lazy"
+                    decoding="async"
                   >
+                {% elsif show_placeholder %}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              </div>
 
-                </div>
-              {% endif %}
 
               <div class="carousel-content">
                 <h3 class="carousel-title">

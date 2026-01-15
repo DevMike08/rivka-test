@@ -16,10 +16,24 @@
               {% if image %}
                 <div class="carousel-image">
                   <img
-                    src="{{ image | image_url: width: 600 }}"
-                    alt="{{ image.alt | escape }}"
-                    loading="lazy"
+                  src="{{ image | image_url: width: 600 }}"
+                  srcset="
+                      {{ image | image_url: width: 320 }} 320w,
+                      {{ image | image_url: width: 480 }} 480w,
+                      {{ image | image_url: width: 640 }} 640w,
+                      {{ image | image_url: width: 960 }} 960w,
+                      {{ image | image_url: width: 1200 }} 1200w
+                  "
+                  sizes="
+                      (max-width: 767px) 100vw,
+                      (max-width: 1023px) 25vw,
+                      16vw
+                  "
+                  alt="{{ image.alt | escape }}"
+                  loading="lazy"
+                  decoding="async"
                   >
+
                 </div>
               {% endif %}
 

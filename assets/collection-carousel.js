@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const carouselEl = document.querySelector('[data-collection-carousel]');
   if (!carouselEl) return;
 
+  const slides = carouselEl.querySelectorAll('.swiper-slide');
+  if (slides.length <= 1) return;
+
   new Swiper(carouselEl, {
     slidesPerView: 1,
     spaceBetween: 16,

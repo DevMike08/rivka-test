@@ -1,26 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const carouselEl = document.querySelector('[data-collection-carousel]');
-  if (!carouselEl) return;
+const initCollectionCarousel = () => {
+  const carouselContainer = document.querySelector('[data-collection-carousel]');
 
-  const slides = carouselEl.querySelectorAll('.swiper-slide');
-  if (slides.length <= 1) return;
-
-  new Swiper(carouselEl, {
-    slidesPerView: 1,
-    spaceBetween: 16,
-    watchOverflow: true,
-    navigation: {
+  if (carouselContainer) {
+    new Swiper(carouselContainer, {
+      slidesPerView: 1.2,
+      spaceBetween: 16,
+      grabCursor: true,
+      navigation: {
         nextEl: '[data-carousel-next]',
-        prevEl: '[data-carousel-prev]'
-    },
-    breakpoints: {
+        prevEl: '[data-carousel-prev]',
+      },
+      watchOverflow: true,
+      breakpoints: {
         768: {
-        slidesPerView: 4
+          slidesPerView: 3,
+          spaceBetween: 20
         },
         1024: {
-        slidesPerView: 6
+          slidesPerView: 4,
+          spaceBetween: 24
         }
-    }
+      }
     });
+  }
+};
 
+document.addEventListener('DOMContentLoaded', initCollectionCarousel);
+
+document.addEventListener('shopify:section:load', () => {
+  initCollectionCarousel();
 });

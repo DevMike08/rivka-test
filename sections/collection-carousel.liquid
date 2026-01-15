@@ -1,0 +1,140 @@
+{% if section.blocks.size > 0 %}
+  <div class="collection-carousel page-width">
+    <div class="swiper" data-collection-carousel>
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% assign collection = block.settings.collection %}
+          {% if collection %}
+
+            {% assign image = nil %}
+            {% assign show_placeholder = false %}
+
+            {% if block.settings.image != blank %}
+              {% assign image = block.settings.image %}
+            {% elsif collection.featured_image != blank %}
+              {% assign image = collection.featured_image %}
+            {% else %}
+              {% assign show_placeholder = true %}
+            {% endif %}
+
+
+
+            {% assign url = block.settings.url | default: collection.url %}
+
+            <a
+              href="{{ url }}"
+              class="swiper-slide carousel-slide"
+              {{ block.shopify_attributes }}
+            >
+              <div class="carousel-image">
+                {% if image %}
+                  <img
+                    src="{{ image | image_url: width: 600 }}"
+                    srcset="
+                      {{ image | image_url: width: 320 }} 320w,
+                      {{ image | image_url: width: 480 }} 480w,
+                      {{ image | image_url: width: 640 }} 640w,
+                      {{ image | image_url: width: 960 }} 960w,
+                      {{ image | image_url: width: 1200 }} 1200w
+                    "
+                    sizes="
+                      (max-width: 767px) 100vw,
+                      (max-width: 1023px) 25vw,
+                      16vw
+                    "
+                    alt="{{ image.alt | escape }}"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {% elsif show_placeholder %}
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              </div>
+
+
+              <div class="carousel-content">
+                <h3 class="carousel-title">
+                  {{ block.settings.title | default: collection.title }}
+                </h3>
+
+                {% if block.settings.description != blank %}
+                  <p class="carousel-description">
+                    {{ block.settings.description }}
+                  </p>
+                {% endif %}
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="swiper-button-prev" data-carousel-prev></div>
+      <div class="swiper-button-next" data-carousel-next></div>
+    </div>
+  </div>
+{% endif %}
+
+{{ 'collection-carousel.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"
+  defer
+></script>
+
+{{ 'collection-carousel.js' | asset_url | script_tag }}
+
+
+
+
+
+{% schema %}
+{
+  "name": "Collection Carousel",
+  "tag": "section",
+  "class": "collection-carousel-section",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Collection title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripción",
+          "default": "Short description for this collection"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL destino (opcional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen (opcional)"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Carousel"
+    }
+  ],
+  "templates": ["collection"]
+}
+{% endschema %}
